@@ -1,6 +1,6 @@
 # TypeDoc
 
-> Documentation generator for TypeScript projects.
+> Documentation generator for TypeScript projects meets Deno.
 
 [![Build Status](https://travis-ci.org/TypeStrong/typedoc.svg?branch=master)](https://travis-ci.org/TypeStrong/typedoc)
 [![NPM Version](https://badge.fury.io/js/typedoc.svg)](https://badge.fury.io/js/typedoc)

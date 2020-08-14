@@ -27,6 +27,7 @@
     "lunr": "^2.3.8",
     "marked": "^1.1.1",
     "minimatch": "^3.0.0",
+    "node-fetch": "^2.6.0",
     "progress": "^2.0.3",
     "shelljs": "^0.8.4",
     "typedoc-default-themes": "^0.10.2"
@@ -43,12 +44,13 @@
     "@types/mocha": "^8.0.1",
     "@types/mockery": "^1.4.29",
     "@types/node": "^14.0.27",
+    "@types/node-fetch": "^2.5.7",
     "@types/shelljs": "^0.8.8",
     "mocha": "^8.1.1",
     "mockery": "^2.1.0",
     "nyc": "^15.1.0",
     "tslint": "^5.20.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.7"
   },
   "files": [
     "bin",

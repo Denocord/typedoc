@@ -91,6 +91,10 @@ export class PackagePlugin extends ConverterComponent {
             return;
         }
 
+        if (node.fileName.match(/^https?:\/\//)) {
+            return;
+        }
+
         const fileName = node.fileName;
         let dirName = Path.resolve(Path.dirname(fileName));
         while (!packageAndReadmeFound() && !reachedTopDirectory(dirName) && !visitedDirBefore(dirName)) {
