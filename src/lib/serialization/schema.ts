@@ -219,10 +219,16 @@ export interface TupleType extends Type, S<M.TupleType, 'type'> {
     elements?: ModelToObject<M.TupleType['elements']>;
 }
 
+export interface NamedTupleMemberType extends Type, S<M.NamedTupleMember, 'type'> {
+    name: string;
+    isOptional: boolean;
+    element: ModelToObject<M.NamedTupleMember['element']>;
+}
+
 export interface TypeOperatorType extends Type, S<M.TypeOperatorType, 'type' | 'operator' | 'target'> {
 }
 
-export interface TypeParameterType extends Type, S<M.TypeParameterType, 'type' | 'name' | 'constraint'> {
+export interface TypeParameterType extends Type, S<M.TypeParameterType, 'type' | 'name' | 'constraint' | 'default'> {
 }
 
 export interface UnionType extends Type, S<M.UnionType, 'type' | 'types'> {
