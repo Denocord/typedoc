@@ -20,6 +20,7 @@
     "node": ">= 10.0.0"
   },
   "dependencies": {
+    "@denocord/typedoc-cache": "github:denocord/typedoc-cache#44ef92f97774227d1b0eaeaac3c07ffba9b8e554",
     "fs-extra": "^9.0.1",
     "handlebars": "^4.7.6",
     "highlight.js": "^10.0.0",

@@ -29,7 +29,7 @@ export class DenoCompilerHost implements ts.CompilerHost {
         return fileName;
     }
 
-    __getModuleInfo(fileName: string, attempts = 0): any {
+    __getModuleInfo(fileName: string): any {
         if (!fileName.match(/^https?:\/\//)) {
             if (!existsSync(fileName)) return {
                 local: fileName,
@@ -40,33 +40,14 @@ export class DenoCompilerHost implements ts.CompilerHost {
                 __code: readFileSync(fileName, { encoding: "utf-8" })
             };
         }
-        if (attempts < 2 && !fileName.endsWith(".d.ts")) {
-            const { status, stdout, stderr } = spawnSync("deno", ["info", "--json", "--unstable", this.stripFileName(fileName)]);
-            if (status) {
-                console.error(stderr.toString());
-                const { status: cacheStatus, stderr: stderrFromCache } = spawnSync("deno", ["cache", this.stripFileName(fileName)]);
-                if (cacheStatus) {
-                    const err = new Error("cannot load appropriate files")
-                    console.error(stderrFromCache.toString());
-                    throw err;
-                } else {
-                    console.warn("file cached successfully, but cannot get module info");
-                    return this.__getModuleInfo(fileName, ++attempts);
-                }
-            }
-
+        const { status, stdout, stderr } = spawnSync("node", [`${__dirname}/standalone-fetch-file`, fileName]);
+        if (status) {
+            const err = new Error("cannot load appropriate files");
+            console.error(stderr.toString());
+            throw err;
+        } else {
             const json = JSON.parse(stdout);
             return json;
-        } else {
-            const { status, stdout, stderr } = spawnSync("node", [`${__dirname}/standalone-fetch-file`, fileName]);
-            if (status) {
-                const err = new Error("cannot load appropriate files");
-                console.error(stderr.toString());
-                throw err;
-            } else {
-                const json = JSON.parse(stdout);
-                return json;
-            }
         }
     }
 
@@ -77,12 +58,8 @@ export class DenoCompilerHost implements ts.CompilerHost {
         if (shouldCreateNewSourceFile) throw new Error("should not create new sources");
         if (this.cache[fileName]) return this.cache[fileName];
         const json = this.__getModuleInfo(this.stripFileName(fileName));
-        if (!json.__code) {
-            const data = readFileSync(json.local, { encoding: "utf-8" });
-            return this.cache[fileName] = ts.createSourceFile(fileName, data, languageVersion);
-        } else {
-            return this.cache[fileName] = ts.createSourceFile(fileName, json.__code, languageVersion);
-        }
+        return this.cache[fileName] = ts.createSourceFile(fileName, json.__code, languageVersion);
+        
     }
     getDefaultLibFileName(options: ts.CompilerOptions): string {
         return "https://raw.githubusercontent.com/denoland/deno/master/cli/dts/lib.deno.ns.d.ts";
